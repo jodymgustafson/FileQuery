@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="FileQuery.Controls.SearchResultsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FileQuery.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="500">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Open" Executed="OpenCommand_Executed" CanExecute="OpenCommand_CanExecute" />
+        <CommandBinding Command="Copy" Executed="CopyCommand_Executed" CanExecute="OpenCommand_CanExecute" />
+        <CommandBinding Command="SelectAll" Executed="SelectAllCommand_Executed" />
+    </UserControl.CommandBindings>
+    <ListView Name="ResultListView" ItemsSource="{Binding}" Background="#111111" Foreground="Green" Padding="3" MouseDoubleClick="ListView_MouseDoubleClick">
+        <ListView.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="_Open File" Command="Open"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Command="Copy"></MenuItem>
+                <MenuItem Command="SelectAll"></MenuItem>
+            </ContextMenu>
+        </ListView.ContextMenu>
+    </ListView>
+</UserControl>

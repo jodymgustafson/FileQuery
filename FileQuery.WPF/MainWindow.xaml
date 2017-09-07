@@ -1,0 +1,27 @@
+﻿<Window x:Class="FileQuery.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileQuery"
+        xmlns:uc="clr-namespace:FileQuery.Controls"
+        mc:Ignorable="d"
+        Title="File Query 2" Height="600" Width="800" WindowState="Maximized" Icon="Images/filequery.ico">
+    <Window.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <uc:SearchControl></uc:SearchControl>
+        </Grid>
+    </Grid>
+</Window>
