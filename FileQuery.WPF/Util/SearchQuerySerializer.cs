@@ -2,43 +2,64 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using FileQuery.Wpf.ViewModels;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace FileQuery.Wpf.Util
 {
-    class SearchQuerySerializer
+    public static class SearchQuerySerializer
     {
+        /// <summary>
+        /// Converts a view model to yaml
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static string ToYaml(SearchControlViewModel model)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("app: filequery")
-              .Append("version: ").AppendLine(Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-            sb.AppendLine("paths:");
-            foreach (var path in model.SearchPaths)
+            var root = new YamlMappingNode();
+            root.Add("app", "filequery");
+            root.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            var seq = new YamlSequenceNode();
+            foreach (var path in model.SearchPaths.Where(x => x.IsValid))
             {
-                sb.Append(" - type: ").AppendLine(path.PathType)
-                  .Append("   value: ").AppendLine(path.PathValue);
+                var map = new YamlMappingNode();
+                map.Add("type", path.PathType);
+                map.Add("value", path.PathValue);
+                seq.Add(map);
             }
+            root.Add("paths", seq);
 
-            sb.AppendLine("filters:");
-            foreach (var filter in model.SearchParams)
+            seq = new YamlSequenceNode();
+            foreach (var filter in model.SearchParams.Where(x => x.IsValid))
             {
-                sb.Append(" - type: ").AppendLine(filter.ParamType)
-                  .Append("   operator: ").AppendLine(filter.ParamOperator.Label)
-                  .Append("   value: ").AppendLine(filter.ParamValue);
+                var map = new YamlMappingNode();
+                map.Add("type", filter.ParamType);
+                map.Add("value", filter.ParamValue);
+                map.Add("operator", filter.ParamOperator.Label);
+                seq.Add(map);
             }
+            root.Add("filters", seq);
 
-            return sb.ToString();
+            var yaml = new SerializerBuilder().Build().Serialize(root);
+            return yaml;
         }
 
-        public static SearchControlViewModel FromYaml(string input)
+        /// <summary>
+        /// Converts yaml to a view model
+        /// </summary>
+        /// <param name="yaml"></param>
+        /// <returns></returns>
+        public static SearchControlViewModel FromYaml(string yaml)
         {
-            return FromYaml(new StringReader(input));
+            return FromYaml(new StringReader(yaml));
         }
 
+        /// <summary>
+        /// Converts a yaml stream to a view model
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         public static SearchControlViewModel FromYaml(TextReader reader)
         {
             var model = new SearchControlViewModel();

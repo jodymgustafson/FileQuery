@@ -27,44 +27,33 @@ namespace FileQuery.Controls
         {
             if (ViewModel != null)
             {
-                // Start with one path and param
-                AddSearchPath();
-                AddSearchParam();
+                // Start with one path and one param
+                if (ViewModel.SearchPaths.Count == 0)
+                {
+                    AddSearchPath();
+                }
+                if (ViewModel.SearchParams.Count == 0)
+                {
+                    AddSearchParam();
+                }
             }
         }
 
         private void AddSearchPath()
         {
             var item = new SearchPathItemViewModel();
-            item.PropertyChanged += PathItem_PropertyChanged;
             ViewModel.SearchPaths.Add(item);
         }
 
         private void AddSearchParam()
         {
             var item = new SearchParamItemViewModel();
-            item.PropertyChanged += ParamItem_PropertyChanged;
             ViewModel.SearchParams.Add(item);
         }
 
         private void AddPath_Click(object sender, RoutedEventArgs e)
         {
             AddSearchPath();
-
-            //if (folderDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    item.PathValue = folderDlg.SelectedPath;
-            //}
-        }
-
-        private void PathItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "RemoveItem")
-            {
-                var item = (sender as SearchPathItemViewModel);
-                item.PropertyChanged -= PathItem_PropertyChanged;
-                ViewModel.SearchPaths.Remove(item);
-            }
         }
 
         private void ResetPaths_Click(object sender, RoutedEventArgs e)
@@ -75,16 +64,6 @@ namespace FileQuery.Controls
         private void AddParam_Click(object sender, RoutedEventArgs e)
         {
             AddSearchParam();
-        }
-
-        private void ParamItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "RemoveItem")
-            {
-                var item = (sender as SearchParamItemViewModel);
-                item.PropertyChanged -= PathItem_PropertyChanged;
-                ViewModel.SearchParams.Remove(item);
-            }
         }
 
         private void ResetParams_Click(object sender, RoutedEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FileQuery"
         xmlns:uc="clr-namespace:FileQuery.Controls"
         mc:Ignorable="d"
-        Title="File Query 2" Height="600" Width="800" WindowState="Maximized" Icon="Images/filequery.ico">
+        Title="File Query 2" Height="600" Width="800" WindowState="Maximized" Icon="Images/filequery.ico" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="ComboBox">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />

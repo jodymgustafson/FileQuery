@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileQuery.Wpf.Dialogs"
         mc:Ignorable="d"
-        Title="About" Height="219" Width="300" ResizeMode="NoResize" Icon="/FileQueryWpf;component/Images/filequery.ico">
+        Title="About" Height="219" Width="350" ResizeMode="NoResize" Icon="/FileQueryWpf;component/Images/filequery.ico">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="Black" Offset="1"/>
@@ -16,8 +16,8 @@
         <StackPanel Orientation="Horizontal">
             <Image Source="/FileQueryWpf;component/Images/filequery.ico" Width="128" Height="128" VerticalAlignment="Top"></Image>
             <StackPanel>
-                <Label FontSize="20">File Query</Label>
-                <Label FontSize="18" Content="{Binding Version}"></Label>
+                <Label FontSize="28">File Query</Label>
+                <Label FontSize="16" Content="{Binding Version}"></Label>
             </StackPanel>
         </StackPanel>
         <Button IsCancel="True" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80" Margin="0,16,0,0">OK</Button>

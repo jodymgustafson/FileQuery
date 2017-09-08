@@ -5,7 +5,7 @@ namespace FileQuery.Wpf.ViewModels
     /// <summary>
     /// A 2-tuple for selecting filter operators in a combobox
     /// </summary>
-    class FilterOperatorItem
+    public class FilterOperatorItem
     {
         public FilterOperatorItem(FilterOperator op, string label)
         {

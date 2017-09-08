@@ -87,7 +87,7 @@ namespace FileQuery.Wpf.Util
             }
             set
             {
-                Settings.Default.SearchQuery = SearchQuerySerializer.ToYaml(value);
+                Settings.Default.SearchQuery = value == null ? null : SearchQuerySerializer.ToYaml(value);
             }
         }
 

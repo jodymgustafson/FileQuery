@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace FileQuery.Wpf.ViewModels
 {
     // Base class for all objects that implement INotifyPropertyChanged
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

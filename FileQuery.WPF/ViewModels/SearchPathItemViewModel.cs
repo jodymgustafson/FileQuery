@@ -1,6 +1,6 @@
 ﻿namespace FileQuery.Wpf.ViewModels
 {
-    class SearchPathItemViewModel : ViewModelBase
+    public class SearchPathItemViewModel : ViewModelBase
     {
         private string _PathType;
         private string _PathValue;
@@ -66,6 +66,14 @@
         public bool IsExclude
         {
             get { return PathType == "Exclude"; }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(PathValue);
+            }
         }
     }
 }

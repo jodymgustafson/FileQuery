@@ -17,8 +17,6 @@ namespace FileQuery.Core.Filter
             FilterOperator = op;
         }
 
-        #region IFileQueryFilter Members
-
         public abstract string Name
         {
             get;
@@ -34,8 +32,6 @@ namespace FileQuery.Core.Filter
             bool accept = AcceptFile(file);
             return accept;
         }
-
-        #endregion
 
         public override string ToString()
         {

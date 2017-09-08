@@ -74,7 +74,6 @@ namespace FileQuery.Wpf.Dialogs
                 settings.FileViewPath = ViewModel.CustomViewerPath;
             }
 
-            settings.Save();
             Close();
         }
 

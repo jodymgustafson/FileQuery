@@ -10,8 +10,8 @@ namespace FileQuery
     {
         public MainWindow()
         {
-            InitializeComponent();
             CheckVersionUpgrade();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -24,6 +24,11 @@ namespace FileQuery
                 Settings.Default.Upgrade();
                 Settings.Default.UpgradeSettings = false;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Settings.Default.Save();
         }
     }
 }

@@ -80,9 +80,9 @@
     <Compile Include="Util\CustomCommands.cs" />
     <Compile Include="Util\FilterOperatorUtil.cs" />
     <Compile Include="Util\QueryFilterFactory.cs" />
+    <Compile Include="Util\QueryProcessManager.cs" />
     <Compile Include="Util\SearchQueryFactory.cs" />
     <Compile Include="Util\SearchQuerySerializer.cs" />
-    <Compile Include="Util\Shell32.cs" />
     <Compile Include="ViewModels\FilterOperatorItem.cs" />
     <Compile Include="ViewModels\SearchControlViewModel.cs" />
     <Compile Include="ViewModels\SearchParamItemViewModel.cs" />

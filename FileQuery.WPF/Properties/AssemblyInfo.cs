@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("File Query")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("File searching application")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("JM Gustafson")]
+[assembly: AssemblyCompany("WorldTree Software")]
 [assembly: AssemblyProduct("File Query")]
 [assembly: AssemblyCopyright("Copyright © JM Gustafson 2017")]
 [assembly: AssemblyTrademark("")]
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.0.1.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]

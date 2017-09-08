@@ -6,6 +6,9 @@ using FileQuery.Wpf.ViewModels;
 
 namespace FileQuery.Wpf.Util
 {
+    /// <summary>
+    /// Used to generate a search query from a view model
+    /// </summary>
     static class SearchQueryFactory
     {
         public static Query GetSearchQuery(SearchControlViewModel ViewModel)
@@ -13,7 +16,7 @@ namespace FileQuery.Wpf.Util
             Query query = new Query();
 
             // Get include paths
-            foreach (var p in ViewModel.SearchPaths.Where(x => x.IsInclude && !string.IsNullOrEmpty(x.PathValue)))
+            foreach (var p in ViewModel.SearchPaths.Where(x => x.IsInclude && x.IsValid))
             {
                 ValidateSearchPath(p.PathValue);
                 query.AddFileSource(new DirectorySearchSource(p.PathValue, p.IsRecursive));
@@ -26,7 +29,7 @@ namespace FileQuery.Wpf.Util
             }
 
             // Get search params
-            foreach (var f in ViewModel.SearchParams)
+            foreach (var f in ViewModel.SearchParams.Where(x => x.IsValid))
             {
                 query.AddFilter(QueryFilterFactory.GetQueryFilter(f));
             }

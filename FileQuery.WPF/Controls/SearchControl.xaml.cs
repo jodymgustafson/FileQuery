@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -17,81 +15,36 @@ namespace FileQuery.Controls
     /// </summary>
     public partial class SearchControl : UserControl
     {
-        private BackgroundWorker backgroundWorker;
-        private FileQueryProcessor queryProc;
-
         private SearchControlViewModel ViewModel
         {
             get { return DataContext as SearchControlViewModel; }
+        }
+
+        private QueryProcessManager _queryProc;
+        private QueryProcessManager QueryProc
+        {
+            get
+            {
+                return _queryProc ?? (_queryProc = new QueryProcessManager(ViewModel, Dispatcher));
+            }
         }
 
         public SearchControl()
         {
             InitializeComponent();
 
-            var query = AppSettingsFacade.Instance.SearchQuery;
-            DataContext = query ?? new SearchControlViewModel();
-
-            backgroundWorker = new BackgroundWorker()
-            {
-                WorkerSupportsCancellation = true
-            };
-            backgroundWorker.DoWork += BackgroundWorker_DoWork;
-            backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
-        }
-
-        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Dispatch(new Action(() => ViewModel.IsSearching = false));
-        }
-
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Dispatch(new Action(() => ViewModel.IsSearching = true));
-            RunFileQuery(e.Argument as Query);
-        }
-
-        private void RunFileQuery(Query query)
-        {
-            if (queryProc == null)
-            {
-                queryProc = new FileQueryProcessor();
-                queryProc.FileFound += QueryProc_FileFound;
-            }
-
+            // Init the query to the one stored in app settings
+            SearchControlViewModel query = null;
             try
             {
-                queryProc.Execute(query);
+                query = AppSettingsFacade.Instance.SearchQuery;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Search Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppSettingsFacade.Instance.SearchQuery = null;
+                MessageBox.Show("Error loading search query from app settings: " + ex.Message);
             }
-        }
-
-        private void SearchButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (backgroundWorker.IsBusy)
-            {
-                queryProc.Cancel();
-                backgroundWorker.CancelAsync();
-            }
-            else
-            {
-                try
-                {
-                    Query query = SearchQueryFactory.GetSearchQuery(ViewModel);
-                    ValidateSearchQuery(query);
-                    ViewModel.SearchResults.Clear();
-                    AppSettingsFacade.Instance.SearchQuery = ViewModel;
-                    AppSettingsFacade.Instance.Save();
-                    backgroundWorker.RunWorkerAsync(query);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error Creating Query", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            DataContext = query ?? new SearchControlViewModel();
         }
 
         private void ValidateSearchQuery(Query query)
@@ -102,54 +55,9 @@ namespace FileQuery.Controls
             }
         }
 
-        private void QueryProc_FileFound(object sender, FileFoundEventArgs e)
-        {
-            Dispatch(new Action(() => ViewModel.SearchResults.Add(e.fileInfo.FullName)));
-        }
-
-        private void Dispatch(Action action)
-        {
-            Dispatcher.BeginInvoke(action);
-        }
-
-        private void Results_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Reset:
-                    ViewModel.SearchResults.Clear();
-                    break;
-                default:
-                    foreach (string i in e.NewItems)
-                    {
-                        ViewModel.SearchResults.Add(i);
-                    }
-                    break;
-            }
-        }
-
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             new SettingsDialog().ShowDialog();
-        }
-
-        private void SaveResults()
-        {
-            var dlg = new System.Windows.Forms.SaveFileDialog();
-            dlg.AddExtension = true;
-            dlg.DefaultExt = "txt";
-            dlg.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                try
-                {
-                    System.IO.File.WriteAllText(dlg.FileName, string.Join("\n", ViewModel.SearchResults));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error saving file: " + ex.Message, "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
         }
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
@@ -171,7 +79,21 @@ namespace FileQuery.Controls
 
         private void SaveCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            SaveResults();
+            var dlg = new System.Windows.Forms.SaveFileDialog();
+            dlg.AddExtension = true;
+            dlg.DefaultExt = "txt";
+            dlg.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    File.WriteAllText(dlg.FileName, string.Join("\n", ViewModel.SearchResults));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error saving file: " + ex.Message, "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void ExitCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
@@ -186,9 +108,27 @@ namespace FileQuery.Controls
 
         private void ExecuteCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            // This will cause any text fields to lose focus and update the view model
-            StartSearch.Focus();
-            SearchButton_Click(sender, e);
+            // Toggles the search state: If running it stops, otherwise it starts
+            if (QueryProc.IsRunning)
+            {
+                QueryProc.Abort();
+            }
+            else
+            {
+                try
+                {
+                    Query query = SearchQueryFactory.GetSearchQuery(ViewModel);
+                    ValidateSearchQuery(query);
+                    ViewModel.SearchResults.Clear();
+                    // Save the view model to app settings
+                    AppSettingsFacade.Instance.SearchQuery = ViewModel;
+                    QueryProc.Start(query);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error Creating Query", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void SaveQueryMenuItem_Click(object sender, RoutedEventArgs e)

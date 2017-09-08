@@ -6,7 +6,7 @@ namespace FileQuery.Core.Filter
 {
     public class FileDateModifiedFilter : FileQueryFilter
     {
-        private List<DateTime> modifiedTimes = new List<DateTime>();
+        protected List<DateTime> modifiedTimes = new List<DateTime>();
 
         public FileDateModifiedFilter(DateTime date, FilterOperator op)
             : base(op)

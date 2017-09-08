@@ -31,6 +31,7 @@ namespace FileQuery.Controls
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            // This will cause the item to be deleted
             ViewModel.RemoveItem = true;
         }
     }

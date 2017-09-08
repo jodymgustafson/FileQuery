@@ -11,7 +11,7 @@ namespace FileQuery.Core.Filter
         /// <summary>
         /// Tests that a file has the specified extension
         /// </summary>
-        /// <param name="extension">extension without the dot (e.g. 'exe')</param>
+        /// <param name="extension">file extension (e.g. 'exe')</param>
         public FileExtensionFilter(string extension)
             : this(extension, FilterOperator.Equal)
         { }
@@ -19,13 +19,13 @@ namespace FileQuery.Core.Filter
         /// <summary>
         /// Tests that a file has one of the specified extenstions
         /// </summary>
-        /// <param name="extensions">extension without the dot (e.g. 'exe')</param>
+        /// <param name="extensions">file extension (e.g. 'exe')</param>
         public FileExtensionFilter(params string[] extensions)
             : this(extensions[0], FilterOperator.In)
         {
             for (var i = 1; i < extensions.Length; i++)
             {
-                _extensions.Add("." + extensions[i]);
+                _extensions.Add(NormalizeExtension(extensions[i]));
             }
         }
 
@@ -35,14 +35,19 @@ namespace FileQuery.Core.Filter
         /// <param name="extension"></param>
         /// <param name="op"></param>
         public FileExtensionFilter(string extension, FilterOperator op)
-            : base("*." + extension, op)
+            : base("*" + NormalizeExtension(extension), op)
         {
-            _extensions.Add("." + extension);
+            _extensions.Add(NormalizeExtension(extension));
         }
 
         public override string Name
         {
             get { return "ext"; }
+        }
+
+        private static string NormalizeExtension(string ext)
+        {
+            return ext.StartsWith(".") ? ext : "." + ext;
         }
 
         #region IFileQueryFilter Members

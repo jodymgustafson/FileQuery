@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace FileQuery.Core.Filter
 {
     public class FileSizeFilter : FileQueryFilter
     {
-        private List<long> Sizes = new List<long>();
+        protected List<long> Sizes = new List<long>();
 
         /// <summary>
         /// Tests that a file has the specified size
@@ -46,7 +47,7 @@ namespace FileQuery.Core.Filter
         /// <summary>
         /// Tests a file's size
         /// </summary>
-        /// <param name="size">Size with an optional modifier such as KB, MB, GB. Default is KB.</param>
+        /// <param name="size">Size with an optional modifier such as KB, MB, GB. Default is KB. The "B" is optional.</param>
         /// <param name="op"></param>
         public FileSizeFilter(string size, FilterOperator op)
             : base(op)
@@ -54,34 +55,18 @@ namespace FileQuery.Core.Filter
             AddFileSize(size);
         }
 
+        Regex reFileSize = new Regex(@"((?:\d*\.)?\d+)([kmg]*[b]?)");
+
         private void AddFileSize(string size)
         {
-            // See if the param has a modifier on the end
-            if (size.Length > 2 && char.IsLetter(size.Substring(size.Length - 2)[1]))
+            var match = reFileSize.Match(size.ToLower());
+            if (!match.Success)
             {
-                // Default to KB
-                var byteSize = (long)(Convert.ToDouble(size.Substring(0, size.Length - 2)) * 1024L);
-
-                // Determine the modifier
-                string modifier = size.Substring(size.Length - 2).ToUpper();
-                switch (modifier)
-                {
-                    case "KB":
-                        // Already computed above
-                        break;
-                    case "MB":
-                        byteSize *= 1024L;
-                        break;
-                    case "GB":
-                        byteSize *= 1024L * 1024L;
-                        break;
-                    default:
-                        throw new FileQueryException("Invalid file size modifier: " + modifier);
-                }
-
-                Sizes.Add(byteSize);
+                throw new FileQueryException("Invalid file size: " + size);
             }
-            else
+
+            // See if the param has a modifier on the end
+            if (string.IsNullOrEmpty(match.Groups[2].Value))
             {
                 // Just a number, default to KB
                 try
@@ -92,6 +77,30 @@ namespace FileQuery.Core.Filter
                 {
                     throw new FileQueryException("Invalid file size: " + size);
                 }
+            }
+            else
+            {
+                // Default size is KB
+                var decSize = Convert.ToDouble(match.Groups[1].Value) * 1024L;
+
+                // Determine the modifier
+                char modifier = match.Groups[2].Value[0];
+                switch (modifier)
+                {
+                    case 'k':
+                        // already computed
+                        break;
+                    case 'm':
+                        decSize = decSize * 1024L;
+                        break;
+                    case 'g':
+                        decSize = decSize * 1024L * 1024L;
+                        break;
+                    default:
+                        throw new FileQueryException("Invalid file size modifier: " + modifier);
+                }
+
+                Sizes.Add((long)decSize);
             }
         }
 
@@ -115,7 +124,7 @@ namespace FileQuery.Core.Filter
             return false;
         }
 
-        private bool TestFileSize(long fileLength, long size)
+        protected bool TestFileSize(long fileLength, long size)
         {
             switch (FilterOperator)
             {

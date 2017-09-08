@@ -86,8 +86,6 @@ namespace FileQuery.Core.Filter
             _regex.Add(new Regex($"(^{pattern.ToLower().Replace(".", @"\.").Replace("*", ".*").Replace("?", ".{1}")}$)"));
         }
 
-        #region IFileQueryFilter Members
-
         public override bool AcceptFile(FileInfo file)
         {
             bool accept = false;
@@ -108,8 +106,6 @@ namespace FileQuery.Core.Filter
         {
             get { return "name"; }
         }
-
-        #endregion
 
         public override string ToString()
         {

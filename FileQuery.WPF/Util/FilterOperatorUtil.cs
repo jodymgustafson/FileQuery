@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FileQuery.Core.Filter;
 using FileQuery.Wpf.ViewModels;
 
 namespace FileQuery.Wpf.Util
 {
-    static class FilterOperatorUtil
+    public static class FilterOperatorUtil
     {
         private static readonly Dictionary<string, IEnumerable<FilterOperatorItem>> OperatorsByType = new Dictionary<string, IEnumerable<FilterOperatorItem>>()
         {
@@ -44,6 +45,11 @@ namespace FileQuery.Wpf.Util
         public static IEnumerable<FilterOperatorItem> GetOperatorsForType(string filterType)
         {
             return OperatorsByType[filterType];
+        }
+
+        public static FilterOperatorItem GetOperatorItem(string filterType, FilterOperator op)
+        {
+            return GetOperatorsForType(filterType).FirstOrDefault(x => x.Operator == op);
         }
     }
 }

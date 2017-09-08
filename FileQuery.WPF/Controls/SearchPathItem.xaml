@@ -18,7 +18,7 @@
         </StackPanel>
         <DockPanel Margin="5,0">
             <Button DockPanel.Dock="Right" ToolTip="Browse" Click="Browse_Click">...</Button>
-            <TextBox Text="{Binding PathValue}"></TextBox>
+            <TextBox Text="{Binding PathValue, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </DockPanel>
     </DockPanel>
 </UserControl>

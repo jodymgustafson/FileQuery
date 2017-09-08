@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace FileQuery.Wpf.ViewModels
 {
-    class SearchControlViewModel : ViewModelBase
+    public class SearchControlViewModel : ViewModelBase
     {
         private ObservableCollection<SearchPathItemViewModel> _SearchPaths = new ObservableCollection<SearchPathItemViewModel>();
         private ObservableCollection<SearchParamItemViewModel> _SearchParams = new ObservableCollection<SearchParamItemViewModel>();
@@ -12,11 +13,8 @@ namespace FileQuery.Wpf.ViewModels
         public SearchControlViewModel()
         {
             SearchResults.CollectionChanged += SearchResults_CollectionChanged;
-        }
-
-        private void SearchResults_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            NotifyPropertyChanged("FileCount");
+            SearchPaths.CollectionChanged += SearchPaths_CollectionChanged;
+            SearchParams.CollectionChanged += SearchParams_CollectionChanged;
         }
 
         public ObservableCollection<SearchPathItemViewModel> SearchPaths
@@ -38,12 +36,6 @@ namespace FileQuery.Wpf.ViewModels
             {
                 return _SearchParams;
             }
-
-            set
-            {
-                _SearchParams = value;
-                NotifyPropertyChanged();
-            }
         }
 
         public ObservableCollection<string> SearchResults
@@ -51,12 +43,6 @@ namespace FileQuery.Wpf.ViewModels
             get
             {
                 return _SearchResults;
-            }
-
-            set
-            {
-                _SearchResults = value;
-                NotifyPropertyChanged();
             }
         }
 
@@ -93,5 +79,60 @@ namespace FileQuery.Wpf.ViewModels
         {
             get { return (IsSearching ? "Searching..." : "Ready"); }
         }
+
+        #region Collection changed listeners
+
+        private void SearchParams_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // When items are added...
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (SearchParamItemViewModel item in e.NewItems)
+                {
+                    // We need to listen for when an item is marked to be removed
+                    item.PropertyChanged += SearchParamItem_PropertyChanged; ;
+                }
+            }
+        }
+
+        private void SearchParamItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RemoveItem")
+            {
+                var item = sender as SearchParamItemViewModel;
+                SearchParams.Remove(item);
+                item.PropertyChanged -= SearchParamItem_PropertyChanged;
+            }
+        }
+
+        private void SearchPaths_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // When items are added...
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (SearchPathItemViewModel item in e.NewItems)
+                {
+                    // We need to listen for when an item is marked to be removed
+                    item.PropertyChanged += SearchPathItem_PropertyChanged;
+                }
+            }
+        }
+
+        private void SearchPathItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RemoveItem")
+            {
+                var item = sender as SearchPathItemViewModel;
+                SearchPaths.Remove(item);
+                item.PropertyChanged -= SearchPathItem_PropertyChanged;
+            }
+        }
+
+        private void SearchResults_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            NotifyPropertyChanged("FileCount");
+        }
+
+        #endregion
     }
 }

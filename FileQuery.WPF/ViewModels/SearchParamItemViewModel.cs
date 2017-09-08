@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using FileQuery.Core.Filter;
 using FileQuery.Wpf.Util;
 
 namespace FileQuery.Wpf.ViewModels
 {
-    class SearchParamItemViewModel : ViewModelBase
+    public class SearchParamItemViewModel : ViewModelBase
     {
 
         private string _Value;
@@ -97,6 +96,14 @@ namespace FileQuery.Wpf.ViewModels
         private void UpdateOperators()
         {
             Operators = FilterOperatorUtil.GetOperatorsForType(ParamType);
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return ParamOperator != null && !string.IsNullOrEmpty(ParamType);// readonly doesn't have a value && !string.IsNullOrEmpty(ParamValue);
+            }
         }
     }
 }

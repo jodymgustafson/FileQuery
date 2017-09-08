@@ -57,8 +57,6 @@ namespace FileQuery.Core.Filter
             _regex.Add(re);
         }
 
-        #region IFileQueryFilter Members
-
         public override bool AcceptFile(System.IO.FileInfo file)
         {
             // Set initial state of acceptance
@@ -133,7 +131,5 @@ namespace FileQuery.Core.Filter
         {
             get { return "contents"; }
         }
-
-        #endregion
     }
 }
