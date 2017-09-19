@@ -25,7 +25,20 @@ namespace FileQuery.Controls
         {
             get
             {
-                return _queryProc ?? (_queryProc = new QueryProcessManager(ViewModel, Dispatcher));
+                if (_queryProc == null)
+                {
+                    _queryProc = new QueryProcessManager(ViewModel, Dispatcher);
+                    _queryProc.SearchCompleted += QueryProc_SearchCompleted;
+                }
+                return _queryProc;
+            }
+        }
+
+        private void QueryProc_SearchCompleted(object sender, QueryProcessManagerArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message, "Search Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

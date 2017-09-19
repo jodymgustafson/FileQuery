@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400" Loaded="UserControl_Loaded">
     <StackPanel Margin="2" Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-        <Label Background="LightGray">Search Paths</Label>
+        <Label Background="LightGray" Foreground="DarkSlateGray" FontWeight="Bold" FontSize="16">Search Paths</Label>
         <StackPanel Margin="8,4">
             <ItemsControl ItemsSource="{Binding SearchPaths}" >
                 <ItemsControl.ItemTemplate>
@@ -25,7 +25,7 @@
                 </TextBlock>
             </StackPanel>
         </StackPanel>
-        <Label Background="LightGray" Margin="0,8,0,0">Search Parameters</Label>
+        <Label Background="LightGray" Margin="0,8,0,0" Foreground="DarkSlateGray" FontWeight="Bold" FontSize="16">Search Parameters</Label>
         <StackPanel Margin="8,4">
             <ItemsControl ItemsSource="{Binding SearchParams}" >
                 <ItemsControl.ItemTemplate>

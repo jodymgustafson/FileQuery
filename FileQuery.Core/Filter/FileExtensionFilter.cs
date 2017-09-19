@@ -6,7 +6,7 @@ namespace FileQuery.Core.Filter
 {
     public class FileExtensionFilter : FileNameFilter
     {
-        private List<string> _extensions = new List<string>();
+        protected List<string> _extensions = new List<string>();
 
         /// <summary>
         /// Tests that a file has the specified extension

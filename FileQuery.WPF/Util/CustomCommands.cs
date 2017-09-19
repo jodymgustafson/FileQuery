@@ -23,5 +23,11 @@ namespace FileQuery.Wpf.Util
                                     new KeyGesture(Key.X, ModifierKeys.Alt)
                                 }
                         );
+
+        public static readonly RoutedUICommand AddExcludePath = new RoutedUICommand(
+                                "Add _Exclude Path",
+                                "Exclude",
+                                typeof(CustomCommands)
+                        );
     }
 }

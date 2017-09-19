@@ -72,13 +72,13 @@ namespace FileQuery.Core
 
                     if (source is FileListSearchSource)
                     {
-                        // Search in a saved result set
-                        //SearchResultSet(source, query);
+                        // Search in a set of files
+                        SearchResultSet(source as FileListSearchSource, query.Filters);
                     }
                     else if (source is DirectorySearchSource)
                     {
                         // Search in a directory
-                        SearchDirectory((DirectorySearchSource)source, excludePaths, query.Filters);
+                        SearchDirectory(source as DirectorySearchSource, excludePaths, query.Filters);
                     }
                     else
                     {
@@ -92,6 +92,24 @@ namespace FileQuery.Core
             {
                 IsRunning = false;
                 if (Logger.IsDebugEnabled) Logger.Debug("Query finished at: " + DateTime.Now);
+            }
+        }
+
+        private void SearchResultSet(FileListSearchSource source, FileQueryFilterList filters)
+        {
+            foreach (var path in source.FilePaths)
+            {
+                if (abortSearch) break;
+
+                var file = new FileInfo(path);
+                if (file.Exists)
+                {
+                    TestFile(file, filters);
+                }
+                else
+                {
+                    throw new FileQueryException("File does not exist: " + file.FullName);
+                }
             }
         }
 

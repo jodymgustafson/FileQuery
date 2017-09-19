@@ -2,162 +2,59 @@ using System;
 
 namespace FileQuery.Core.Filter
 {
-    /// <summary>
-    /// Takes an expression and parses it into a query filter
-    /// 
-    /// TODO: Make this able to load user defined filters from other assemblies
-    /// http://my.execpc.com/~gopalan/dotnet/reflection.html
-    /// </summary>
     public class FileQueryFilterFactory
     {
-        public static IFileQueryFilter GetFileQueryFilter(string expression)
+        /// <summary>
+        /// Builds a filter instance
+        /// </summary>
+        /// <param name="filterType">Name of the filter</param>
+        /// <param name="value">Value of the filter</param>
+        /// <param name="op">Filter operator</param>
+        /// <returns></returns>
+        public static IFileQueryFilter GetFileQueryFilter(FilterType filterType, FilterOperator op, string value)
         {
-            string name = "";
-            string value = "";
-            FilterOperator op = FilterOperator.Equal;
-            if (ParseExpression(expression, ref name, ref value, ref op))
+            switch (filterType)
             {
-                if (op == FilterOperator.In)
-                {
-                    return GetFileQueryFilter(name, ParseInValues(value), FilterOperator.Equal);
-                }
-                else
-                {
-                    return GetFileQueryFilter(name, value, op);
-                }
-            }
-            else
-            {
-                throw new FileQueryException("Invalid query: Where clause invalid");
-            }
-        }
-
-        public static IFileQueryFilter GetFileQueryFilter(string name, string value, FilterOperator op)
-        {
-            switch (name.ToLower())
-            {
-                case "name":
+                case FilterType.Name:
                     return new FileNameFilter(value, op);
-                case "size":
+                case FilterType.Size:
                     return new FileSizeFilter(value, op);
-                case "contents":
+                case FilterType.Contents:
                     return new FileContentsFilter(value, op);
-                case "ext":
+                case FilterType.Extension:
                     return new FileExtensionFilter(value, op);
-                case "modified":
+                case FilterType.ModifiedDate:
                     return new FileDateModifiedFilter(value, op);
-                case "readonly":
+                case FilterType.ReadOnly:
                     return new FileReadOnlyFilter(value);
                 default:
-                    throw new FileQueryException("Invalid query filter: Invalid filter: " + name);
+                    throw new FileQueryException("Invalid query filter: " + filterType);
             }
         }
 
         /// <summary>
-        /// Gets a filter and chains other filters for the IN clause to it
+        /// Gets a filter that uses an IN clause
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="filterType"></param>
         /// <param name="values"></param>
-        /// <param name="op"></param>
         /// <returns></returns>
-        public static IFileQueryFilter GetFileQueryFilter(string name, string[] values, FilterOperator op)
+        public static IFileQueryFilter GetFileQueryFilter(FilterType filterType, string[] values)
         {
-            // When the op is IN chain together all of the values as filters
-            IFileQueryFilter firstFilter = GetFileQueryFilter(name, values[0].Trim(), op);
-            //if (firstFilter is FileQueryFilter)
-            //{
-            //    FileQueryFilter lastFilter = (FileQueryFilter)firstFilter;
-            //    lastFilter.IsInClauseFilter = true;
-            //    // Chain the rest of this filters to the first one
-            //    for (int i = 1; i < values.Length; i++)
-            //    {
-            //        string value = values[i].Trim();
-            //        lastFilter.NextFilter = (FileQueryFilter)GetFileQueryFilter(name, value, op);
-            //        lastFilter = lastFilter.NextFilter;
-            //        lastFilter.IsInClauseFilter = true;
-            //    }
-            //}
-            //else
-            //{
-            //    throw new FileQueryException("Filter does not support IN clause: " + firstFilter.GetType());
-            //}
-
-            return firstFilter;
-        }
-
-        private static bool ParseExpression(string expression, ref string name, ref string value, ref FilterOperator op)
-        {
-            int opSize = 1;
-
-            // Find the operator
-            char[] operators = {'=', '<', '>', '!', ' ', '\t'};
-            int idxOp = expression.IndexOfAny(operators);
-            if (idxOp < 0)
+            switch (filterType)
             {
-                throw new FileQueryException("Invalid WHERE clause: Missing operator");
+                case FilterType.Name:
+                    return new FileNameFilter(values);
+                case FilterType.Size:
+                    return new FileSizeFilter(values);
+                case FilterType.Contents:
+                    return new FileContentsFilter(values);
+                case FilterType.Extension:
+                    return new FileExtensionFilter(values);
+                case FilterType.ModifiedDate:
+                    return new FileDateModifiedFilter(values);
+                default:
+                    throw new FileQueryException("Invalid query filter for IN clause: " + filterType);
             }
-
-            // Strip whitespace
-            while (idxOp < expression.Length && char.IsWhiteSpace(expression[idxOp])) idxOp++;
-
-            string sOp = expression.Substring(idxOp);
-            // Get operator
-            if (sOp.StartsWith("<>") || sOp.StartsWith("!="))
-            {
-                op = FilterOperator.NotEqual;
-                opSize = 2;
-            }
-            else if (sOp.StartsWith("<="))
-            {
-                op = FilterOperator.LessThanEqual;
-                opSize = 2;
-            }
-            else if (sOp[0] == '<')
-            {
-                op = FilterOperator.LessThan;
-            }
-            else if (sOp.StartsWith(">="))
-            {
-                op = FilterOperator.GreaterThanEqual;
-                opSize = 2;
-            }
-            else if (sOp[0] == '>')
-            {
-                op = FilterOperator.GreaterThan;
-            }
-            else if (sOp[0] == '=')
-            {
-                op = FilterOperator.Equal;
-            }
-            else if (sOp.StartsWith("in", StringComparison.OrdinalIgnoreCase))
-            {
-                op = FilterOperator.In;
-                opSize = 2;
-            }
-            else
-            {
-                throw new FileQueryException("Invalid WHERE clause: Missing or invalid operator");
-            }
-
-            name = expression.Substring(0, idxOp).Trim().ToLower();
-            value = expression.Substring(idxOp + opSize).Trim();
-
-            return true;
-        }
-
-        private static string[] ParseInValues(string rawValue)
-        {
-            if (rawValue[0] == '(' && rawValue[rawValue.Length - 1] == ')')
-            {
-                // Get list of values between parens
-                return rawValue.Substring(1, rawValue.Length - 2).Split(',');
-            }
-            else
-            {
-                throw new FileQueryException("Invalid IN clause: Missing parens");
-            }
-
-            //return new string[] { rawValue };
         }
     }
 }

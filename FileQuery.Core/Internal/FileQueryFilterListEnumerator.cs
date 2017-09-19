@@ -4,9 +4,11 @@ using FileQuery.Core.Filter;
 
 namespace FileQuery.Core
 {
+    /// <summary>
+    /// Enumerator over the items in a FileQueryFilterList
+    /// </summary>
     internal class FileQueryFilterListEnumerator : IEnumerator<IFileQueryFilter>
     {
-        //private bool isFirst = true;
         private FileQueryFilterList _filterList;
         private IEnumerator<IFileQueryFilter> _enumerator;
 
@@ -20,14 +22,6 @@ namespace FileQuery.Core
         {
             get
             {
-                //if (isFirst)
-                //{
-                //    isFirst = false;
-                //    if (_filterList.SimpleFileNameFilter != null)
-                //    {
-                //        return _filterList.SimpleFileNameFilter;
-                //    }
-                //}
                 return _enumerator.Current;
             }
         }
@@ -52,7 +46,6 @@ namespace FileQuery.Core
 
         public void Reset()
         {
-            //isFirst = true;
             _enumerator.Reset();
         }
     }

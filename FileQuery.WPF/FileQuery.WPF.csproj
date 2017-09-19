@@ -87,6 +87,7 @@
     <Compile Include="ViewModels\SearchControlViewModel.cs" />
     <Compile Include="ViewModels\SearchParamItemViewModel.cs" />
     <Compile Include="ViewModels\SearchPathItemViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="Controls\SearchControl.xaml">
@@ -171,6 +172,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DropDownCustomColorPicker\DropDownCustomColorPicker.csproj">
+      <Project>{fd2ec7d4-4316-4f8f-8108-8381f0b4b340}</Project>
+      <Name>DropDownCustomColorPicker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FileQuery.Core\FileQuery.Core.csproj">
       <Project>{c10b856a-3a93-4c22-a787-f910ef1d9bdd}</Project>
       <Name>FileQuery.Core</Name>

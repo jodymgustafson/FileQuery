@@ -18,10 +18,30 @@ namespace FileQuery.Wpf.Util
     class AppSettingsFacade
     {
         private static AppSettingsFacade _Instance;
+        private static ResultsSettings _results;
 
         public static AppSettingsFacade Instance
         {
             get { return _Instance ?? (_Instance = new AppSettingsFacade()); }
+        }
+
+        public ResultsSettings Results
+        {
+            get
+            {
+                if (_results == null)
+                {
+                    _results = new ResultsSettings();
+                }
+                return _results;
+            }
+
+            set
+            {
+                _results = value;
+                Settings.Default.ResultsBackground = value.BackgroundColor;
+                Settings.Default.ResultsForegound = value.ForegroundColor;
+            }
         }
 
         public FileViewerType FileViewerType
@@ -95,5 +115,35 @@ namespace FileQuery.Wpf.Util
         {
             Settings.Default.Save();
         }
+    }
+
+    class ResultsSettings
+    {
+        public string BackgroundColor
+        {
+            get
+            {
+                return Settings.Default.ResultsBackground;
+            }
+            set
+            {
+                Settings.Default.ResultsBackground = value;
+            }
+        }
+
+        public string ForegroundColor
+        {
+            get
+            {
+                return Settings.Default.ResultsForegound;
+            }
+            set
+            {
+                Settings.Default.ResultsForegound = value;
+            }
+        }
+
+        public const string DefaultBackground = "#111111";
+        public const string DefaultForeground = "#FF32CD32";
     }
 }

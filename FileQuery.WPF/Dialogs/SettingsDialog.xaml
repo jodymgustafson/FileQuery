@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cp="clr-namespace:DropDownCustomColorPicker;assembly=CustomColorPicker"
         xmlns:local="clr-namespace:FileQuery.Wpf.Dialogs"
         mc:Ignorable="d"
-        Title="File Query Settings" Height="182" Width="300" ResizeMode="NoResize">
+        Title="File Query Settings" Height="306" Width="300" ResizeMode="NoResize">
     <StackPanel>
-        <Label>Default program to open files with:</Label>
+        <Label FontWeight="Bold" Background="LightGray">Default program to open files with:</Label>
         <StackPanel Margin="8,0">
             <RadioButton IsChecked="{Binding UseNotepad}">Notepad</RadioButton>
             <RadioButton IsChecked="{Binding UseAssociatedViewer}">Associated program</RadioButton>
@@ -17,7 +18,20 @@
                 <Button Click="ChooseAppButton_Click">...</Button>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="left" Margin="8,12">
+        <Label FontWeight="Bold" Background="LightGray" Margin="0,8">Results:</Label>
+        <StackPanel Margin="8,0">
+            <StackPanel Orientation="Horizontal">
+                <cp:CustomColorPicker SelectedColor="{Binding ResultsBackground, Mode=TwoWay}" Width="40" VerticalAlignment="Center"></cp:CustomColorPicker>
+                <Label>Background</Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <cp:CustomColorPicker SelectedColor="{Binding ResultsForeground, Mode=TwoWay}" Width="40" VerticalAlignment="Center"></cp:CustomColorPicker>
+                <Label>Text</Label>
+            </StackPanel>
+            <Button HorizontalAlignment="Left" Margin="0,4" Click="ResetResultsButton_Click">Reset</Button>
+        </StackPanel>
+        <Label Height="3" Background="LightGray" Margin="0,6"></Label>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6">
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0" Width="50" Click="OKButton_Click" IsDefault="True">OK</Button>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0" Width="50" IsCancel="True">Cancel</Button>
         </StackPanel>

@@ -6,6 +6,11 @@ using FileQuery.Wpf.ViewModels;
 
 namespace FileQuery.Wpf.Util
 {
+    public class QueryProcessManagerArgs : EventArgs
+    {
+        public Exception Error { get; set; }
+    }
+
     /// <summary>
     /// Manages the background thread that the search query runs on.
     /// Tightly coupled to SearchControl.xaml.cs.
@@ -16,6 +21,8 @@ namespace FileQuery.Wpf.Util
         private SearchControlViewModel viewModel;
         private FileQueryProcessor queryProc;
         private Dispatcher dispatcher { get; }
+
+        public event EventHandler<QueryProcessManagerArgs> SearchCompleted;
 
         public bool IsRunning { get { return backgroundWorker.IsBusy; } }
 
@@ -53,6 +60,7 @@ namespace FileQuery.Wpf.Util
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Dispatch(new Action(() => viewModel.IsSearching = false));
+            Dispatch(new Action(() => SearchCompleted?.Invoke(this, new QueryProcessManagerArgs { Error = LastError })));
         }
 
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -76,7 +84,7 @@ namespace FileQuery.Wpf.Util
             }
             catch (Exception ex)
             {
-                Dispatch(new Action(() => LastError = ex));
+                LastError = ex;
             }
         }
 

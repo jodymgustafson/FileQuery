@@ -4,20 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FileQuery.Controls"
+             xmlns:util="clr-namespace:FileQuery.Wpf.Util"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="500">
     <UserControl.CommandBindings>
         <CommandBinding Command="Open" Executed="OpenCommand_Executed" CanExecute="OpenCommand_CanExecute" />
         <CommandBinding Command="Copy" Executed="CopyCommand_Executed" CanExecute="OpenCommand_CanExecute" />
         <CommandBinding Command="SelectAll" Executed="SelectAllCommand_Executed" />
+        <CommandBinding Command="util:CustomCommands.AddExcludePath" Executed="ExcludePathCommand_Executed" CanExecute="OpenCommand_CanExecute"/>
     </UserControl.CommandBindings>
-    <ListView Name="ResultListView" ItemsSource="{Binding}" Background="#111111" Foreground="Green" Padding="3" MouseDoubleClick="ListView_MouseDoubleClick">
+    <ListView Name="ResultListView" ItemsSource="{Binding SearchResults}" Background="{Binding ResultsSettings.BackgroundColor}" Foreground="{Binding ResultsSettings.ForegroundColor}" Padding="3" MouseDoubleClick="ListView_MouseDoubleClick" FontSize="14">
         <ListView.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="_Open File" Command="Open"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Command="Copy"></MenuItem>
                 <MenuItem Command="SelectAll"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Command="util:CustomCommands.AddExcludePath"></MenuItem>
             </ContextMenu>
         </ListView.ContextMenu>
     </ListView>

@@ -36,6 +36,12 @@ namespace FileQuery.Wpf.Util
             throw new Exception("Invlaid search parameter type: " + paramType);
         }
 
+        /// <summary>
+        /// Gets a query filter for an IN clause
+        /// </summary>
+        /// <param name="paramType"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         private static IFileQueryFilter GetQueryFilter(string paramType, string[] values)
         {
             switch (paramType)

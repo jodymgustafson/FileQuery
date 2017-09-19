@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using FileQuery.Wpf.ViewModels;
 
@@ -20,6 +21,30 @@ namespace FileQuery.Controls
         }
 
         private void Browse_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.IsResultsFile)
+            {
+                SelectFile();
+            }
+            else
+            {
+                SelectFolder();
+            }
+        }
+
+        private void SelectFile()
+        {
+            var dlg = new System.Windows.Forms.OpenFileDialog();
+            dlg.DefaultExt = "txt";
+            dlg.CheckFileExists = true;
+            dlg.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ViewModel.PathValue = dlg.FileName;
+            }
+        }
+
+        private void SelectFolder()
         {
             var dlg = new System.Windows.Forms.FolderBrowserDialog();
             dlg.SelectedPath = ViewModel.PathValue;

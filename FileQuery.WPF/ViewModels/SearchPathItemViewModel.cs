@@ -11,6 +11,9 @@
             PathType = "Include-Recursive";
         }
 
+        /// <summary>
+        /// Can be Include-Recursive, Include-NoRecure, Exclude
+        /// </summary>
         public string PathType
         {
             get
@@ -66,6 +69,11 @@
         public bool IsExclude
         {
             get { return PathType == "Exclude"; }
+        }
+
+        public bool IsResultsFile
+        {
+            get { return PathType == "File"; }
         }
 
         public bool IsValid

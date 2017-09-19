@@ -11,7 +11,7 @@
             <ComboBoxItem Content="Path (deep)" Tag="Include-Recursive"></ComboBoxItem>
             <ComboBoxItem Content="Path (shallow)" Tag="Include-NoRecurse"></ComboBoxItem>
             <ComboBoxItem Content="Exclude Path" Tag="Exclude"></ComboBoxItem>
-            <!--<ComboBoxItem Content="Result File" Tag="Results"></ComboBoxItem>-->
+            <ComboBoxItem Content="Results File" Tag="File"></ComboBoxItem>
         </ComboBox>
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
             <Button ToolTip="Delete" Click="Delete_Click">X</Button>

@@ -36,9 +36,13 @@ namespace FileQuery.Wpf.Dialogs
 
         private SettingsViewModel GetViewModel()
         {
-            var vm = new SettingsViewModel();
-
             var settings = AppSettingsFacade.Instance;
+            var vm = new SettingsViewModel()
+            {
+                ResultsBackground = settings.Results.BackgroundColor,
+                ResultsForeground = settings.Results.ForegroundColor
+            };
+
             switch (settings.FileViewerType)
             {
                 case FileViewerType.Notepad:
@@ -74,6 +78,9 @@ namespace FileQuery.Wpf.Dialogs
                 settings.FileViewPath = ViewModel.CustomViewerPath;
             }
 
+            settings.Results.ForegroundColor = ViewModel.ResultsForeground;
+            settings.Results.BackgroundColor = ViewModel.ResultsBackground;
+
             Close();
         }
 
@@ -105,6 +112,12 @@ namespace FileQuery.Wpf.Dialogs
                     ViewModel.CustomViewerPath = dlg.FileName;
                 }
             }
+        }
+
+        private void ResetResultsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ResultsBackground = ResultsSettings.DefaultBackground;
+            ViewModel.ResultsForeground = ResultsSettings.DefaultForeground;
         }
     }
 }

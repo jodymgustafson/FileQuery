@@ -14,5 +14,11 @@
     <Setting Name="SearchQuery" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ResultsBackground" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#111111</Value>
+    </Setting>
+    <Setting Name="ResultsForegound" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FF32CD32</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

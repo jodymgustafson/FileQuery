@@ -15,7 +15,10 @@ namespace FileQuery.Wpf.ViewModels
             SearchResults.CollectionChanged += SearchResults_CollectionChanged;
             SearchPaths.CollectionChanged += SearchPaths_CollectionChanged;
             SearchParams.CollectionChanged += SearchParams_CollectionChanged;
+            ResultsSettings = new SearchResultsViewModel();
         }
+
+        public SearchResultsViewModel ResultsSettings { get; set; }
 
         public ObservableCollection<SearchPathItemViewModel> SearchPaths
         {

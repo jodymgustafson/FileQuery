@@ -4,6 +4,8 @@ namespace FileQuery.Core.Filter
 {
     public enum FilterOperator { Equal, NotEqual, LessThan, LessThanEqual, GreaterThan, GreaterThanEqual, In }
 
+    public enum FilterType { Name, Extension, Contents, Size, ModifiedDate, ReadOnly }
+
     /// <summary>
     /// All file filters must implement this interface
     /// </summary>

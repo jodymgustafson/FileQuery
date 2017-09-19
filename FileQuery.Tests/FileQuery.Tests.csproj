@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\FileDateModifiedFilterTests.cs" />
+    <Compile Include="Core\FileExtensionFilterTests.cs" />
+    <Compile Include="Core\FileReadOnlyFilterTests.cs" />
     <Compile Include="Core\FileSizeFilterTests.cs" />
     <Compile Include="Core\FilterTests.cs" />
     <Compile Include="Core\MockFileInfo.cs" />

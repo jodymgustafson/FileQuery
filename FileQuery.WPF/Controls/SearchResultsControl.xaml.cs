@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FileQuery.Wpf.Util;
+using FileQuery.Wpf.ViewModels;
 
 namespace FileQuery.Controls
 {
@@ -13,6 +15,11 @@ namespace FileQuery.Controls
     /// </summary>
     public partial class SearchResultsControl : UserControl
     {
+        SearchControlViewModel ViewModel
+        {
+            get { return DataContext as SearchControlViewModel; }
+        }
+
         public SearchResultsControl()
         {
             InitializeComponent();
@@ -42,6 +49,25 @@ namespace FileQuery.Controls
         private void SelectAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ResultListView.SelectAll();
+        }
+
+        private void ExcludePathCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddExcludePath();
+        }
+
+        private void AddExcludePath()
+        {
+            var file = ResultListView.SelectedValue as string;
+            if (!string.IsNullOrEmpty(file))
+            {
+                string folder = new FileInfo(file).DirectoryName;
+                ViewModel.SearchPaths.Add(new SearchPathItemViewModel
+                {
+                    PathType = "Exclude",
+                    PathValue = folder
+                });
+            }
         }
 
         private void ViewSelectedFile()

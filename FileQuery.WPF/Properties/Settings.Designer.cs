@@ -70,5 +70,29 @@ namespace FileQuery.Wpf.Properties {
                 this["SearchQuery"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#111111")]
+        public string ResultsBackground {
+            get {
+                return ((string)(this["ResultsBackground"]));
+            }
+            set {
+                this["ResultsBackground"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF32CD32")]
+        public string ResultsForegound {
+            get {
+                return ((string)(this["ResultsForegound"]));
+            }
+            set {
+                this["ResultsForegound"] = value;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace FileQuery.Tests.Core
         public void WhenValidDate_ThenValid()
         {
             var filter = new TestFileDateModifiedFilter("1/1/2017", FilterOperator.Equal);
-            Assert.AreEqual(new DateTime(2017, 1, 1), filter.modifiedTimes[0]);
+            Assert.AreEqual(new DateTime(2017, 1, 1), filter.ModifiedTimes[0]);
             Assert.AreEqual(FilterOperator.Equal, filter.FilterOperator);
         }
 
@@ -27,8 +27,8 @@ namespace FileQuery.Tests.Core
         public void WhenMultipleDates_ThenValid()
         {
             var filter = new TestFileDateModifiedFilter("1/1/2017", "10/11/2016");
-            Assert.AreEqual(new DateTime(2017, 1, 1), filter.modifiedTimes[0]);
-            Assert.AreEqual(new DateTime(2016, 10, 11), filter.modifiedTimes[1]);
+            Assert.AreEqual(new DateTime(2017, 1, 1), filter.ModifiedTimes[0]);
+            Assert.AreEqual(new DateTime(2016, 10, 11), filter.ModifiedTimes[1]);
             Assert.AreEqual(FilterOperator.In, filter.FilterOperator);
         }
 
@@ -41,7 +41,7 @@ namespace FileQuery.Tests.Core
                 : base(dates)
             { }
 
-            public new List<DateTime> modifiedTimes {  get { return base.modifiedTimes; } }
+            public List<DateTime> ModifiedTimes {  get { return base.modifiedTimes; } }
         }
     }
 }
