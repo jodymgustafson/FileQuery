@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FileQuery.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hagerty Insurance Agency, LLC")]
+[assembly: AssemblyCompany("WorldTree Softeware")]
 [assembly: AssemblyProduct("FileQuery.Tests")]
-[assembly: AssemblyCopyright("Copyright © Hagerty Insurance Agency, LLC 2017")]
+[assembly: AssemblyCopyright("Copyright © JM Gustafson 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

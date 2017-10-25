@@ -4,9 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FileQuery.Controls"
+             xmlns:util="clr-namespace:FileQuery.Wpf.Util"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400" Loaded="UserControl_Loaded">
     <StackPanel Margin="2" Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+        <StackPanel Orientation="Horizontal" >
+            <Button ToolTip="New Query" Command="New">
+                <Image Source="/FileQuery;component/Images/new-query.png" Stretch="None"></Image>
+            </Button>
+            <Button ToolTip="Open Query" Command="Open">
+                <Image Source="/FileQuery;component/Images/open-query.png" Stretch="None"></Image>
+            </Button>
+            <Button ToolTip="Save Query" Command="Save">
+                <Image Source="/FileQuery;component/Images/save-query.png" Stretch="None"></Image>
+            </Button>
+            <Button ToolTip="Start Query" Command="util:CustomCommands.Execute">
+                <Image Source="/FileQuery;component/Images/start-query.png" Stretch="None"></Image>
+            </Button>
+        </StackPanel>
         <Label Background="LightGray" Foreground="DarkSlateGray" FontWeight="Bold" FontSize="16">Search Paths</Label>
         <StackPanel Margin="8,4">
             <ItemsControl ItemsSource="{Binding SearchPaths}" >

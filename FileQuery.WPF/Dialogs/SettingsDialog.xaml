@@ -6,7 +6,7 @@
         xmlns:cp="clr-namespace:DropDownCustomColorPicker;assembly=CustomColorPicker"
         xmlns:local="clr-namespace:FileQuery.Wpf.Dialogs"
         mc:Ignorable="d"
-        Title="File Query Settings" Height="306" Width="300" ResizeMode="NoResize">
+        Title="File Query Settings" Height="306" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <StackPanel>
         <Label FontWeight="Bold" Background="LightGray">Default program to open files with:</Label>
         <StackPanel Margin="8,0">
